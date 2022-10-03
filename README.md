@@ -18,6 +18,8 @@
 poetry init
 #install django in poetry 
 poetry add django
+#ImageFields를 사용하기 위한 Pillrow 설치
+poetry add Pillrow
 #enter the poetry shell
 poetry shell 
 #exit the poetry shell
@@ -49,3 +51,7 @@ python manage.py startapp houses
 ```python
 AUTH_USER_MODEL = 'users.User' #AppsName.ClassName
 ```
+- models.py를 변경할때마다 migration 및 migrate를 해야 합니다. -> DB와 장고의 동기화
+### RelationShip in Django
+- 서로 다른 App간 대화.
+`Owner = models.ForeignKey("users.User",on_delete=models.CASCADE)`  
