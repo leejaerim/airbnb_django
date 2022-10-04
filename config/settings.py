@@ -41,6 +41,10 @@ CUSTOMED_APPS = [
     "users.apps.UsersConfig",
     "rooms.apps.RoomsConfig",
     "common.apps.CommonConfig",
+    "experiences.apps.ExperiencesConfig",
+    "categories.apps.CategoriesConfig",
+    "reviews.apps.ReviewsConfig",
+    "wishlists.apps.WishlistsConfig",
 ]
 
 INSTALLED_APPS = SYSTEM_APPS + CUSTOMED_APPS
