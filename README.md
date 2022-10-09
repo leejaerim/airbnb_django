@@ -55,3 +55,21 @@ AUTH_USER_MODEL = 'users.User' #AppsName.ClassName
 ### RelationShip in Django
 - 서로 다른 App간 대화.
 `Owner = models.ForeignKey("users.User",on_delete=models.CASCADE)`  
+
+### Shell Control with ORM
+```python
+Room.object.all()
+Room.object.get(name="TEST_")
+
+# => Error get must be retruning 1 object
+Room.objects.filter(pet_friendly=True)
+
+
+Room.object.filter(price__gt=15)
+Room.object.filter(name__contains="서울")
+
+
+Room.object.create()
+
+
+```

@@ -4,8 +4,12 @@ from .models import Room, Amenity
 # Register your models here.
 @admin.register(Room)
 class RoomAdmin(admin.ModelAdmin):
-    list_display = ("name", "price", "kind", "owner", "created_at")
+    list_display = ("name", "price", "kind", "total_amenities", "owner")
+
     list_filter = ("price", "amenities")
+
+    def total_amenities(self, room):
+        return room.amenities.count()
 
 
 @admin.register(Amenity)
