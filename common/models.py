@@ -10,5 +10,6 @@ class CommonModel(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
     # Django doesn't save model in DB
     # is not going to use for the database
+    
     class Meta:
         abstract = True

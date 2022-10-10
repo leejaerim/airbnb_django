@@ -4,12 +4,19 @@ from .models import Room, Amenity
 # Register your models here.
 @admin.register(Room)
 class RoomAdmin(admin.ModelAdmin):
-    list_display = ("name", "price", "kind", "total_amenities", "owner")
+    list_display = ("name", "price", "kind", "total_amenities", "owner", "rating")
 
     list_filter = ("price", "amenities")
 
     def total_amenities(self, room):
         return room.amenities.count()
+
+    search_fields = (
+        "^price",  # search keyword startwith
+        "=name",  # Exact keyword
+        # don't writing acts contains
+        "owner__username",
+    )
 
 
 @admin.register(Amenity)

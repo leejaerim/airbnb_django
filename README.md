@@ -5,6 +5,8 @@
 ### pyproject.toml
 - 다음 파일은, poetry 가상환경에 대한 desc 입니다.
 
+> `dir` method을 통해 해당 오브젝트가 가진 속성을 확인 할 수 있다.
+
 ### poetry 설치 [가상환경] Isolation
 - `curl -sSL https://install.python-poetry.org | python3 -` 입력
 - SSL 에러이슈 
@@ -57,6 +59,7 @@ AUTH_USER_MODEL = 'users.User' #AppsName.ClassName
 `Owner = models.ForeignKey("users.User",on_delete=models.CASCADE)`  
 
 ### Shell Control with ORM
+> .all(), .filter(), .get(), create(), delete()
 ```python
 Room.object.all()
 Room.object.get(name="TEST_")
@@ -64,12 +67,19 @@ Room.object.get(name="TEST_")
 # => Error get must be retruning 1 object
 Room.objects.filter(pet_friendly=True)
 
-
 Room.object.filter(price__gt=15)
 Room.object.filter(name__contains="서울")
-
-
-Room.object.create()
-
-
+#create
+Amenity.object.create(name="Amenity Test", description="How Cool is this.!")
+#delete
+to_delete = Amenity.objects.get(pk=7)
+to_delete.delete() 
 ```
+
+### What is the QuerySet
+- `Room.objects.filter(pet_friendly=True).exclude(price__lt=15).filter(name__contains="서울")`
+> Roles in QuerySet -> provide Lazy Chainng operations, when they needs an actual data.
+
+### Reverse accsessor
+-  when create foreignkey, that models added *_set model . 
+- that is , how you access reverse.

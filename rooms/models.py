@@ -24,17 +24,38 @@ class Room(CommonModel):
         choices=RoomKindChoices.choices,
     )
     # many to many Field
-    owner = models.ForeignKey("users.User", on_delete=models.CASCADE)
-    amenities = models.ManyToManyField("rooms.Amenity")
+    owner = models.ForeignKey(
+        "users.User",
+        on_delete=models.CASCADE,
+        related_name="rooms",
+    )
+    amenities = models.ManyToManyField(
+        "rooms.Amenity",
+        related_name="rooms",
+    )
     category = models.ForeignKey(
         "categories.Category",
         on_delete=models.SET_NULL,
         null=True,
         blank=True,
+        related_name="rooms",
     )
 
     def __str__(self):
         return self.name
+
+    def rating(room):
+        reviews = room.reviews.all()
+        if len(reviews) == 0:
+            return "No Reviews"
+        else:
+            total_rating = 0
+            # for i in reviews:
+            #    total_rating += i.rating
+            # Optimize Query
+            for i in reviews.values("rating"):
+                total_rating += i["rating"]
+            return round(total_rating / reviews.count(), 2)
 
 
 class Amenity(CommonModel):
