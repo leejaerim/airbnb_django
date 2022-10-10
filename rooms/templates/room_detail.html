@@ -1,0 +1,9 @@
+{% if not not_found %}
+<h1>{{room.name}}</h1>
+<h3> {{room.county}}/{{room.city}}</h3>
+<h4>{{room.price}}</h4>
+<h4>{{room.description}}</h4>
+<H5>{{room.category.name}}</H5>
+{% else %}
+<h1> 404 Error</h1>
+{% endif %}

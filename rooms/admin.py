@@ -1,9 +1,19 @@
 from django.contrib import admin
 from .models import Room, Amenity
 
+# you must remember 3 parameters
+# request parameter is having user information request
+@admin.action(description="Set All prices to zero")
+def reset_prices(model_admin, request, rooms):
+    for room in rooms.all():
+        room.price = 0
+        room.save()
+
+
 # Register your models here.
 @admin.register(Room)
 class RoomAdmin(admin.ModelAdmin):
+    actions = (reset_prices,)
     list_display = ("name", "price", "kind", "total_amenities", "owner", "rating")
 
     list_filter = ("price", "amenities")
