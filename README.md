@@ -83,3 +83,13 @@ to_delete.delete()
 ### Reverse accsessor
 -  when create foreignkey, that models added *_set model . 
 - that is , how you access reverse.
+
+### 장고 템플릿의 한계
+- 브라우저 자바스크립트, 즉 리액트를 이용해 동적으로 보여주길 원함.
+- html 이상 동적으로 보여주기엔 템플릿은 한계가 존재.
+- 장고는 admin 패널과 ORM , react를 제공하기 위한 API 사용
+
+### serializer 
+- python 객체를 JSON으로 직렬화.
+- rest_framework를 좀더 유연하게 사용하도록 함.
+- serializer validation 제공.

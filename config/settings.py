@@ -27,6 +27,9 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
+THIRD_PARTY_APPS = [
+    "rest_framework",
+]
 
 # Application definition
 SYSTEM_APPS = [
@@ -50,7 +53,7 @@ CUSTOMED_APPS = [
     "direct_messages.apps.DirectMessagesConfig",
 ]
 
-INSTALLED_APPS = SYSTEM_APPS + CUSTOMED_APPS
+INSTALLED_APPS = SYSTEM_APPS + THIRD_PARTY_APPS + CUSTOMED_APPS
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
