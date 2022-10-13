@@ -93,3 +93,7 @@ to_delete.delete()
 - python 객체를 JSON으로 직렬화.
 - rest_framework를 좀더 유연하게 사용하도록 함.
 - serializer validation 제공.
+
+### DRF
+- `Router` url 과 viewset을 좀더 유연하게 작성하게 해줌
+- 
