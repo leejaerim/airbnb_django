@@ -10,7 +10,6 @@ class CategorySerializer(serializers.ModelSerializer):
             "id",
             "name",
             "kind",
-            "created_at",
         )
 
     # pk = serializers.IntegerField(read_only=True)
