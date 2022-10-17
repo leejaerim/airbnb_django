@@ -1,11 +1,12 @@
 from django.shortcuts import render
 from django.http import HttpResponse
 from .models import Room
+from categories.models import Category
 from rest_framework.views import APIView
 from .models import Amenity
 from .serializers import AmenitySerializer, RoomDetailSerializer, RoomListSerializer
 from rest_framework.response import Response
-from rest_framework.exceptions import NotFound
+from rest_framework.exceptions import NotFound, NotAuthenticated, ParseError
 from rest_framework.status import HTTP_204_NO_CONTENT
 
 from rooms import serializers
@@ -75,12 +76,36 @@ class Rooms(APIView):
         return Response(serializer.data)
 
     def post(self, request):
-        serializer = RoomDetailSerializer(data=request.data)
-        if serializer.is_valid():
-            room = serializer.save()
-            return Response(RoomDetailSerializer(room).data)
+        if request.user.is_authenticated:
+            serializer = RoomDetailSerializer(data=request.data)
+            if serializer.is_valid():
+                category_pk = request.data.get("category")
+                if not category_pk:
+                    raise ParseError("Category is required")
+                try:
+                    category = Category.objects.get(pk=category_pk)
+                    if category.kind == Category.CategoryKindChoices.EXPERIENCE:
+                        raise ParseError("Category kind should be rooms")
+                except Category.DoesNotExist:
+                    raise ParseError("Category doesn't exist!")
+                room = serializer.save(
+                    owner=request.user,
+                    category=category,
+                )
+                amenities = request.data.get("amenities")
+                for amenity_pk in amenities:
+                    try:
+                        amenity = Amenity.objects.get(pk=amenity_pk)
+                        room.amenities.add(amenity)
+                    except Amenity.DoesNotExist:
+                        # room.delete()
+                        raise ParseError("Amenitiy with id {amenity_pk} not found")
+
+                return Response(RoomDetailSerializer(room).data)
+            else:
+                return Response(serializer.errors)
         else:
-            return Response(serializer.errors)
+            raise NotAuthenticated
 
 
 class RoomDetail(APIView):
