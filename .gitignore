@@ -162,3 +162,5 @@ cython_debug/
 config/settings.py
 
 */migrations/*
+
+/uploads

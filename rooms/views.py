@@ -2,6 +2,8 @@ from django.shortcuts import render
 from django.http import HttpResponse
 from .models import Room
 from categories.models import Category
+from reviews.models import Review
+from reviews.serializers import ReviewSerializer
 from rest_framework.views import APIView
 from .models import Amenity
 from .serializers import AmenitySerializer, RoomDetailSerializer, RoomListSerializer
@@ -61,17 +63,6 @@ class AmenityDetail(APIView):
         amenity = self.get_object(pk)
         amenity.delete()
         return Response(status=HTTP_204_NO_CONTENT)
-
-
-def see_all_rooms(request):
-    rooms = Room.objects.all()
-    return render(
-        request,
-        "all_rooms.html",
-        {
-            "rooms": rooms,
-        },
-    )
 
 
 class Rooms(APIView):
@@ -155,22 +146,52 @@ class RoomDetail(APIView):
         return Response(status=HTTP_204_NO_CONTENT)
 
 
-def see_one_room(request, room_pk):
-    try:
-        room = Room.objects.get(pk=room_pk)
-    except Room.DoesNotExist:
-        return render(
-            request,
-            "room_detail.html",
-            {
-                "not_found": True,
-            },
-        )
+class RoomAmenities(APIView):
+    def get_object(self, pk):
+        try:
+            return Room.objects.get(pk=pk)
+        except Room.DoesNotExist:
+            raise NotFound
 
-    return render(
-        request,
-        "room_detail.html",
-        {
-            "room": room,
-        },
-    )
+    def get(self, request, pk):
+        room = self.get_object(pk)
+        serializer = AmenitySerializer(
+            room.amenities.all(),
+            many=True,
+        )
+        return Response(serializer.data)
+
+
+class RoomReviews(APIView):
+    def get_object(self, pk):
+        try:
+            return Room.objects.get(pk=pk)
+        except Room.DoesNotExist:
+            raise NotFound
+
+    def get(self, request, pk):
+        try:
+            page = int(request.query_params.get("page", 1))
+        except ValueError:
+            page = 1
+        page_size = 1
+        start = (page - 1) * page_size
+        end = start + page_size
+
+        room = self.get_object(pk)
+        serializer = ReviewSerializer(
+            room.reviews.all()[start:end],
+            many=True,
+        )
+        return Response(serializer.data)
+
+
+class RoomPhotos(APIView):
+    def get_object(self, pk):
+        try:
+            return Room.objects.get(pk=pk)
+        except Room.DoesNotExist:
+            raise NotFound
+
+    def post(self, request, pk):
+        pass

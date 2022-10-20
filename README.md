@@ -96,4 +96,21 @@ to_delete.delete()
 
 ### DRF
 - `Router` url 과 viewset을 좀더 유연하게 작성하게 해줌
-- 
+- Many To Many Fields 의 경우, Object.add(Object) 와 같이 추가하여 준다.
+- 반대로 ForeignKey의 경우, Object = new_object와 같다.
+- Transaction 지원 (모두 DB 쿼리를 처리하거나, 처리하지 않거나)
+- 기본적으로 DB에 즉시 저장하게 되어있음. 그러나 트랜잭션을 통해 많은 쿼리의 롤백할 수 있음.
+
+### 역접근자
+- A-FK(B) => B.A_set
+- related_name (A_set) 옵션
+
+### Pagination
+- 장고는 페이징처리도 제공
+- Èntry.all()[0:5] => limit 5 쿼리
+
+### 파일 업로드
+> `config/setting.py` 수정
+- MEDIA_ROOT = "uploads"
+- MEDIA_URL = "user-uploads/"
+- static => 보안상 위험하기때문에 개발환경에서만 제공
