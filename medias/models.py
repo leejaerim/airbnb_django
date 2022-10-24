@@ -3,7 +3,7 @@ from common.models import CommonModel
 
 # Create your models here.
 class Photo(CommonModel):
-    file = models.ImageField()
+    file = models.URLField()
     description = models.CharField(
         max_length=140,
     )
@@ -25,7 +25,7 @@ class Photo(CommonModel):
 
 
 class Video(CommonModel):
-    file = models.FileField()
+    file = models.URLField()
     # this video can be along  to one experience, no other video can't be along.
     # etc : payment information. making Unique Relationship
     experience = models.OneToOneField(
