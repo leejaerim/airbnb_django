@@ -1,5 +1,6 @@
 from django.shortcuts import render
 from django.http import HttpResponse
+from django.utils import timezone
 from .models import Room
 from categories.models import Category
 from reviews.models import Review
@@ -19,6 +20,8 @@ from django.db import transaction
 from rooms import serializers
 from medias.serializers import PhotoSerializer
 from rest_framework.permissions import IsAuthenticatedOrReadOnly
+from bookings.models import Booking
+from bookings.serializers import BookingSerializer
 
 
 class Amenities(APIView):
@@ -223,3 +226,27 @@ class RoomPhotos(APIView):
             return Response(serializer.data)
         else:
             return Response(serializer.errors)
+
+
+class RoomBookings(APIView):
+    permission_classes = [IsAuthenticatedOrReadOnly]
+
+    def get_object(self, pk):
+        try:
+            return Room.objects.get(pk=pk)
+        except Room.DoesNotExist:
+            raise NotFound
+
+    def get(self, request, pk):
+        # room = self.get_object(pk)
+        now = timezone.localtime(timezone.now())
+        booking = Booking.objects.filter(
+            room__pk=pk,
+            kind=Booking.BookingKindChoices.ROOM,
+            checkin__gt=now,
+        )  # empty or list
+        serializer = BookingSerializer(
+            booking,
+            many=True,
+        )
+        return Response(serializer.data)
