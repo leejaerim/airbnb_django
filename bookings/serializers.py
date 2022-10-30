@@ -23,7 +23,7 @@ class CreateRoomBookingSerializer(serializers.ModelSerializer):
 
     def validate_checkout(self, value):
         now = timezone.localtime(timezone.now()).date()
-        if now < value:
+        if now > value:
             raise serializers.ValidationError("Can't book in past")
         return value
 
