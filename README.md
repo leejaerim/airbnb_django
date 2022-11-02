@@ -114,3 +114,14 @@ to_delete.delete()
 - MEDIA_ROOT = "uploads"
 - MEDIA_URL = "user-uploads/"
 - static => 보안상 위험하기때문에 개발환경에서만 제공
+
+### Pagination
+```python
+        page = 1
+        page_size = 1
+        start = (page - 1) * page_size
+        end = start + page_size
+        return self.reviews.all()[start:end]
+```
+
+### info parameter
