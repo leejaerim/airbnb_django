@@ -30,6 +30,7 @@ ALLOWED_HOSTS = []
 THIRD_PARTY_APPS = [
     "rest_framework",
     "strawberry.django",
+    "rest_framework.authtoken",
 ]
 
 # Application definition
@@ -149,7 +150,9 @@ PAGE_SIZE = 3
 
 REST_FRAMEWORK = {
     "DEFAULT_AUTHENTICATION_CLASSES": [
-        "rest_framework.authentication.SessionAuthentication",
         "config.authentication.TrustMeBroAuthentication",
+        "rest_framework.authentication.SessionAuthentication",  # session,cookies
+        "rest_framework.authentication.TokenAuthentication",  # token stored in DB
+        "config.authentication.JWTAuthentication",  # JWT
     ]
 }

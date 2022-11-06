@@ -124,4 +124,6 @@ to_delete.delete()
         return self.reviews.all()[start:end]
 ```
 
-### info parameter
+### JWP
+- we use `pyjwp`
+
