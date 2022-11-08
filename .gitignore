@@ -164,3 +164,6 @@ config/settings.py
 */migrations/*
 
 /uploads
+.env
+poetry.lock
+pyproject.toml
