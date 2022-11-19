@@ -50,8 +50,13 @@ class RoomDetailSerializer(ModelSerializer):
 
     def get_is_liked(self, room):
         request = self.context["request"]
-        # 유저가 만든 wishlist 중에서 room pk 체크
-        return Wishlist.objects.filter(user=request.user, rooms__id=room.pk).exists()
+        # 유저가 존재하는지 여부
+        if request.user.is_authenticated:
+            # 유저가 만든 wishlist 중에서 room pk 체크
+            return Wishlist.objects.filter(
+                user=request.user, rooms__id=room.pk
+            ).exists()
+        return False
 
 
 class RoomListSerializer(ModelSerializer):

@@ -17,22 +17,22 @@ class TrustMeBroAuthentication(BaseAuthentication):
             raise AuthenticationFailed(f"No user {username}")
 
 
-class JWTAuthentication(BaseAuthentication):
-    def authenticate(self, request):
-        # decoding jwt
-        token = request.header.get("Jwt")
-        if not token:
-            return None
-        decoded = jwt.decode(
-            token,
-            settings.SECRET_KEY,
-            algorithm="HS256",
-        )
-        pk = decoded.get("pk")
-        if not pk:
-            raise AuthenticationFailed("Invalid Token")
-        try:
-            user = User.objects.get(pk=pk)
-            return (user, None)
-        except User.DoesNotExist:
-            raise AuthenticationFailed("User not Found")
+# class JWTAuthentication(BaseAuthentication):
+#     def authenticate(self, request):
+#         # decoding jwt
+#         token = request.header.get("Jwt")
+#         if not token:
+#             return None
+#         decoded = jwt.decode(
+#             token,
+#             settings.SECRET_KEY,
+#             algorithm="HS256",
+#         )
+#         pk = decoded.get("pk")
+#         if not pk:
+#             raise AuthenticationFailed("Invalid Token")
+#         try:
+#             user = User.objects.get(pk=pk)
+#             return (user, None)
+#         except User.DoesNotExist:
+#             raise AuthenticationFailed("User not Found")

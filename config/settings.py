@@ -36,6 +36,7 @@ THIRD_PARTY_APPS = [
     "rest_framework",
     "strawberry.django",
     "rest_framework.authtoken",
+    "corsheaders",
 ]
 
 # Application definition
@@ -65,6 +66,7 @@ INSTALLED_APPS = SYSTEM_APPS + THIRD_PARTY_APPS + CUSTOMED_APPS
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
+    "corsheaders.middleware.CorsMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
@@ -158,6 +160,8 @@ REST_FRAMEWORK = {
         "config.authentication.TrustMeBroAuthentication",
         "rest_framework.authentication.SessionAuthentication",  # session,cookies
         "rest_framework.authentication.TokenAuthentication",  # token stored in DB
-        "config.authentication.JWTAuthentication",  # JWT
+        # "config.authentication.JWTAuthentication",  # JWT
     ]
 }
+
+CORS_ALLOWED_ORIGINS = ["http://localhost:3000"]
