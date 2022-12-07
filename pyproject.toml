@@ -8,8 +8,7 @@ readme = "README.md"
 
 [tool.poetry.dependencies]
 python = "^3.10"
-Django = "^4.1.1"
-Pillow = "^9.2.0"
+Django = "~4.0"
 djangorestframework = "^3.14.0"
 strawberry-graphql = {extras = ["debug-server"], version = "^0.138.0"}
 strawberry-graphql-django = "^0.7.1"
