@@ -14,7 +14,9 @@ from rest_framework.viewsets import ModelViewSet
 # Create your views here.
 class CategoryViewSet(ModelViewSet):
     serializer_class = CategorySerializer
-    queryset = Category.objects.all()
+    queryset = Category.objects.filter(
+        kind=Category.CategoryKindChoices.ROOM,
+    )
 
 
 # class Categories(APIView):

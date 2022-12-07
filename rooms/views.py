@@ -104,7 +104,9 @@ class Rooms(APIView):
                     for amenity_pk in amenities:
                         amenity = Amenity.objects.get(pk=amenity_pk)
                         room.amenities.add(amenity)
-                    return Response(RoomDetailSerializer(room).data)
+                    return Response(
+                        RoomDetailSerializer(room, context={"request": request}).data
+                    )
             except Exception:
                 raise ParseError("Amenity not Found")
 
@@ -253,7 +255,10 @@ class RoomBookings(APIView):
 
     def post(self, request, pk):
         room = self.get_object(pk)
-        serializer = CreateRoomBookingSerializer(data=request.data)
+        serializer = CreateRoomBookingSerializer(
+            data=request.data,
+            context={"room": room},
+        )
         if serializer.is_valid():
             # Create with CreateRoomBookingSerializer.
             booking = serializer.save(
@@ -265,3 +270,24 @@ class RoomBookings(APIView):
             return Response(serializer.data)
         else:
             return Response(serializer.errors)
+
+
+class RoomBookingCheck(APIView):
+    def get_object(self, pk):
+        try:
+            return Room.objects.get(pk=pk)
+        except Room.DoesNotExist:
+            raise NotFound
+
+    def get(self, request, pk):
+        room = self.get_object(pk)
+        exists = Booking.objects.filter(
+            room=room,
+            checkin__lte=request.query_params.get("check_out"),
+            checkout__gte=request.query_params.get("check_in"),
+        ).exists()
+
+        if exists:
+            return Response({"ok": False})
+        else:
+            return Response({"ok": True})

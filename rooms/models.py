@@ -18,7 +18,7 @@ class Room(CommonModel):
     toilets = models.PositiveIntegerField()
     description = models.TextField()
     address = models.CharField(max_length=250)
-    pet_frendly = models.BooleanField(default=True)
+    pet_friendly = models.BooleanField(default=True)
     kind = models.CharField(
         max_length=20,
         choices=RoomKindChoices.choices,

@@ -11,7 +11,7 @@ from wishlists.models import Wishlist
 class AmenitySerializer(ModelSerializer):
     class Meta:
         model = Amenity
-        fields = ("id", "name", "description")
+        fields = ("pk", "name", "description")
 
 
 class RoomDetailSerializer(ModelSerializer):
@@ -35,8 +35,10 @@ class RoomDetailSerializer(ModelSerializer):
     )
 
     def get_is_owner(self, room):
-        request = self.context["request"]
-        return room.owner == request.user
+        request = self.context.get("request")
+        if request:
+            return room.owner == request.user
+        return False
 
     class Meta:
         model = Room
@@ -49,13 +51,14 @@ class RoomDetailSerializer(ModelSerializer):
         return  # Room.objects.create(**valid_data)
 
     def get_is_liked(self, room):
-        request = self.context["request"]
-        # 유저가 존재하는지 여부
-        if request.user.is_authenticated:
-            # 유저가 만든 wishlist 중에서 room pk 체크
-            return Wishlist.objects.filter(
-                user=request.user, rooms__id=room.pk
-            ).exists()
+        request = self.context.get("request")
+        if request:
+            # 유저가 존재하는지 여부
+            if request.user.is_authenticated:
+                # 유저가 만든 wishlist 중에서 room pk 체크
+                return Wishlist.objects.filter(
+                    user=request.user, rooms__id=room.pk
+                ).exists()
         return False
 
 

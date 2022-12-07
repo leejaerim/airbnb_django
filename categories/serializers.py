@@ -7,7 +7,7 @@ class CategorySerializer(serializers.ModelSerializer):
         model = Category
         # fields = "__all__"
         fields = (
-            "id",
+            "pk",
             "name",
             "kind",
         )
