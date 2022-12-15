@@ -74,26 +74,26 @@ class Rooms(APIView):
     permission_classes = [IsAuthenticatedOrReadOnly]
 
     def get(self, request):
-        all_room = Room.objects.all()
-        serializer = RoomListSerializer(
-            all_room,
+        all_rooms = Room.objects.all()
+        serializer = serializers.RoomListSerializer(
+            all_rooms,
             many=True,
             context={"request": request},
         )
         return Response(serializer.data)
 
     def post(self, request):
-        serializer = RoomDetailSerializer(data=request.data)
+        serializer = serializers.RoomDetailSerializer(data=request.data)
         if serializer.is_valid():
             category_pk = request.data.get("category")
             if not category_pk:
-                raise ParseError("Category is required")
+                raise ParseError("Category is required.")
             try:
                 category = Category.objects.get(pk=category_pk)
                 if category.kind == Category.CategoryKindChoices.EXPERIENCE:
-                    raise ParseError("Category kind should be rooms")
+                    raise ParseError("The category kind should be 'rooms'")
             except Category.DoesNotExist:
-                raise ParseError("Category doesn't exist!")
+                raise ParseError("Category not found")
             try:
                 with transaction.atomic():
                     room = serializer.save(
@@ -102,16 +102,21 @@ class Rooms(APIView):
                     )
                     amenities = request.data.get("amenities")
                     for amenity_pk in amenities:
+
                         amenity = Amenity.objects.get(pk=amenity_pk)
                         room.amenities.add(amenity)
-                    return Response(
-                        RoomDetailSerializer(room, context={"request": request}).data
+                    serializer = serializers.RoomDetailSerializer(
+                        room,
+                        context={"request": request},
                     )
-            except Exception:
-                raise ParseError("Amenity not Found")
-
+                    return Response(serializer.data)
+            except Exception as e:
+                raise ParseError("Amenity not found")
         else:
-            return Response(serializer.errors)
+            return Response(
+                serializer.errors,
+                status=HTTP_400_BAD_REQUEST,
+            )
 
 
 class RoomDetail(APIView):

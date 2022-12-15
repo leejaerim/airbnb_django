@@ -47,8 +47,6 @@ class RoomDetailSerializer(ModelSerializer):
     def get_rating(self, room):
         return room.rating()
 
-    def create(self, valid_data):
-        return  # Room.objects.create(**valid_data)
 
     def get_is_liked(self, room):
         request = self.context.get("request")
